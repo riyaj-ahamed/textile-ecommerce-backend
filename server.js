@@ -2,28 +2,39 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const orderRoutes = require('./routes/orderRoutes');
+const productRoutes = require('./routes/productRoutes');
 
-dotenv.config(); // Load .env variables
+dotenv.config();
 
 const app = express();
 
+// CORS for frontend
+const corsOptions = {
+  origin: "https://riyaj-ahamed.github.io", // your frontend URL
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 // Middleware
-app.use(cors());
-app.use(express.json()); // For parsing application/json
+app.use(express.json());
 
-// API Routes
-app.use('/api/orders', orderRoutes);
+// Root route for Render health check
+app.get('/', (req, res) => {
+  res.send('🚀 Textile E-Commerce Backend is Running!');
+});
 
-// MongoDB Connection
+// Routes
+app.use('/api/v1/products', productRoutes);
+
+// MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('✅ MongoDB Atlas connected'))
-.catch((err) => console.error('❌ MongoDB connection error:', err));
+.then(() => console.log("✅ MongoDB Atlas connected"))
+.catch((err) => console.log("❌ DB Error:", err));
 
-// Start Server
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

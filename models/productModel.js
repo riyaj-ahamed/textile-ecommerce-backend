@@ -1,4 +1,6 @@
-import mongoose from "mongoose";
+// models/productModel.js
+
+const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema(
   {
@@ -23,11 +25,11 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     image: {
-      type: String, // Can be a URL or base64 string
+      type: String, // Image URL
     },
   },
   { timestamps: true }
 );
 
-const Product = mongoose.model("Product", productSchema);
-export default Product;
+const Product = mongoose.model('Product', productSchema);
+module.exports = Product;
