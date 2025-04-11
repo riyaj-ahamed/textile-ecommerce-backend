@@ -14,7 +14,10 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
+const productRoutes = require("./routes/productRoutes"); // ✅ Add this line
+
 app.use("/api/auth", authRoutes);
+app.use("/api/v1/products", productRoutes); // ✅ Mount product routes here
 
 // Test Route
 app.get("/", (req, res) => {
