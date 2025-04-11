@@ -2,10 +2,14 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-// Register Controller
+// Register User
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -31,11 +35,12 @@ const registerUser = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("❌ Registration Error:", error.message);
     res.status(500).json({ message: "Registration failed", error: error.message });
   }
 };
 
-// Login Controller
+// Login User
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;

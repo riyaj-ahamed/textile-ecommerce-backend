@@ -4,22 +4,23 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 
 const app = express();
-
-// Connect DB
 connectDB();
 
-// Middleware
+const allowedOrigins = [
+  "http://localhost:3000", // frontend local dev
+  "https://your-frontend.vercel.app" // deployed frontend
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 // Routes
-const authRoutes = require("./routes/authRoutes");
-const productRoutes = require("./routes/productRoutes"); // ✅ Add this line
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/v1/products", require("./routes/productRoutes"));
 
-app.use("/api/auth", authRoutes);
-app.use("/api/v1/products", productRoutes); // ✅ Mount product routes here
-
-// Test Route
 app.get("/", (req, res) => {
   res.send("🚀 Textile E-Commerce Backend is Running!");
 });
